@@ -29,3 +29,43 @@ Never commit credentials, private keys, or production secrets. Keep server-side 
 ## Project planning
 
 The project backlog is maintained in Linear.
+
+## Local development
+
+The React and Vite application lives in `frontend/`. Install Node.js LTS, then
+run:
+
+```sh
+cd frontend
+npm install
+cp .env.example .env.local
+npm run dev
+```
+
+Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env.local` when
+connecting the app to Supabase. Use the Supabase publishable key in the browser;
+never expose a secret or service-role key. Local environment files are ignored
+by Git.
+
+Run the frontend checks from `frontend/`:
+
+```sh
+npm run build
+npm run lint
+npm test
+npm run format:check
+```
+
+## Vercel API
+
+Vercel serves Node.js functions from `api/` at the repository root. Configure
+`CORS_ALLOWED_ORIGIN` in the Vercel project environment with the exact origin
+of the deployed GitHub Pages site (scheme and host only, no path). The API
+rejects other browser origins. Use `.env.example` as a reference; do not commit
+real environment values.
+
+Run the API tests with Node.js:
+
+```sh
+node --test api/health.test.js
+```
