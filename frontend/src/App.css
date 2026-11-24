@@ -1,0 +1,164 @@
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  width: min(100% - 40px, 1040px);
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--ink);
+  font-size: 19px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: white;
+  background: var(--green);
+  font-size: 18px;
+}
+
+.connection-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.connection-status > span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.welcome-card {
+  width: min(100%, 660px);
+  margin: auto;
+  padding: 72px 0;
+}
+
+.eyebrow {
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 1.4px;
+}
+
+h1 {
+  max-width: 580px;
+  margin: 20px 0 16px;
+  color: var(--ink);
+  font-size: clamp(40px, 7vw, 64px);
+  letter-spacing: -3.2px;
+  line-height: 1.04;
+}
+
+.welcome-card > p {
+  max-width: 550px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.list-preview {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 40px;
+  padding: 19px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 12px 30px rgb(34 54 42 / 5%);
+}
+
+.list-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 13px;
+  color: var(--green-dark);
+  background: var(--green-soft);
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.list-preview strong,
+.list-preview small {
+  display: block;
+}
+
+.list-preview strong {
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.list-preview small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+footer {
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    width: min(100% - 32px, 1040px);
+  }
+
+  .app-header {
+    min-height: 72px;
+  }
+
+  .brand {
+    font-size: 17px;
+  }
+
+  .connection-status {
+    font-size: 12px;
+  }
+
+  .welcome-card {
+    padding: 56px 0;
+  }
+
+  h1 {
+    letter-spacing: -2px;
+  }
+
+  .welcome-card > p {
+    font-size: 16px;
+  }
+}
