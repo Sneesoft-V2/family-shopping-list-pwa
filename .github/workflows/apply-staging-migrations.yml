@@ -12,7 +12,6 @@ concurrency:
 
 jobs:
   migrate:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: staging
     steps:
@@ -24,7 +23,7 @@ jobs:
 
       - name: Verify target is not production
         env:
-          SUPABASE_PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+          SUPABASE_PROJECT_REF: ${{ vars.STAGING_SUPABASE_PROJECT_REF }}
           DEVELOPMENT_SUPABASE_PROJECT_REF: ${{ vars.DEVELOPMENT_SUPABASE_PROJECT_REF }}
           PRODUCTION_SUPABASE_PROJECT_REF: ${{ vars.PRODUCTION_SUPABASE_PROJECT_REF }}
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
@@ -34,19 +33,19 @@ jobs:
             echo "Set SUPABASE_PROJECT_REF in the staging environment."
             exit 1
           fi
-          if [ -z "$DEVELOPMENT_SUPABASE_PROJECT_REF" ]; then
-            echo "Set DEVELOPMENT_SUPABASE_PROJECT_REF as a repository variable."
-            exit 1
-          fi
           if [ -z "$SUPABASE_ACCESS_TOKEN" ] || [ -z "$SUPABASE_DB_PASSWORD" ]; then
             echo "Set SUPABASE_ACCESS_TOKEN and SUPABASE_DB_PASSWORD in the staging environment."
             exit 1
           fi
-          if [ "$SUPABASE_PROJECT_REF" = "$DEVELOPMENT_SUPABASE_PROJECT_REF" ]; then
+          if [ -z "$PRODUCTION_SUPABASE_PROJECT_REF" ]; then
+            echo "Set PRODUCTION_SUPABASE_PROJECT_REF as a repository variable."
+            exit 1
+          fi
+          if [ -n "$DEVELOPMENT_SUPABASE_PROJECT_REF" ] && [ "$SUPABASE_PROJECT_REF" = "$DEVELOPMENT_SUPABASE_PROJECT_REF" ]; then
             echo "Refusing to apply staging migrations to the development project."
             exit 1
           fi
-          if [ -n "$PRODUCTION_SUPABASE_PROJECT_REF" ] && [ "$SUPABASE_PROJECT_REF" = "$PRODUCTION_SUPABASE_PROJECT_REF" ]; then
+          if [ "$SUPABASE_PROJECT_REF" = "$PRODUCTION_SUPABASE_PROJECT_REF" ]; then
             echo "Refusing to apply staging migrations to the production project."
             exit 1
           fi
@@ -55,5 +54,5 @@ jobs:
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-          SUPABASE_PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+          SUPABASE_PROJECT_REF: ${{ vars.STAGING_SUPABASE_PROJECT_REF }}
         run: supabase --yes db push --remote="$SUPABASE_PROJECT_REF"
