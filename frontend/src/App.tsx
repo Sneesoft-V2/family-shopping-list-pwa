@@ -3,11 +3,9 @@ import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
+import type { Tables } from './lib/database.types';
 
-type Family = {
-  id: string;
-  name: string;
-};
+type Family = Pick<Tables<'families'>, 'id' | 'name'>;
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -57,8 +55,7 @@ function App() {
       if (membershipError) {
         setError(membershipError.message);
       } else {
-        const membership = memberships?.[0] as
-          { families: Family | Family[] | null } | undefined;
+        const membership = memberships?.[0];
         const relation = membership?.families;
         setFamily(
           Array.isArray(relation) ? (relation[0] ?? null) : (relation ?? null),

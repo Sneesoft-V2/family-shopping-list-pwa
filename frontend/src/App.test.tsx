@@ -1,5 +1,11 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('./lib/supabase', () => ({
+  isSupabaseConfigured: false,
+  supabase: null,
+}));
+
 import App from './App';
 
 describe('App', () => {
