@@ -32,20 +32,29 @@ The project backlog is maintained in Linear.
 
 ## Local development
 
-The React and Vite application lives in `frontend/`. Install Node.js LTS, then
-run:
+The local Supabase stack uses Docker and is isolated from the hosted development
+and staging projects. Install Node.js LTS and Docker Desktop, then run:
 
 ```sh
 cd frontend
 npm install
-cp .env.example .env.local
+npm run supabase:start
+npm run supabase:env
 npm run dev
 ```
 
-Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env.local` when
-connecting the app to Supabase. Use the Supabase publishable key in the browser;
-never expose a secret or service-role key. Local environment files are ignored
-by Git.
+`supabase:start` starts the local services and creates a demo account and family.
+Sign in with `local-dev@example.test` and `local-dev-password`; these credentials
+are for local development only. `supabase:env` writes the local API URL and
+anon key to the ignored `frontend/.env.local`; it never writes the service-role
+key. If that file already exists, the command refuses to overwrite it.
+
+Use `npm run supabase:reset` to recreate the local database from all versioned
+migrations and restore the demo account. This is destructive only to the local
+database. Run `npm run supabase:stop` to stop the local services. Regenerate
+frontend database types after schema changes with `npm run supabase:types`.
+Never point local development at the hosted development, staging, or production
+database. Never expose a secret or service-role key in the browser.
 
 Run the frontend checks from `frontend/`:
 

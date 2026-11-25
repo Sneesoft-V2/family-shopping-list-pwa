@@ -5,15 +5,25 @@ TypeScript.
 
 ## Local development
 
+The local Supabase stack uses Docker and is isolated from hosted projects.
+
 ```sh
 npm install
-cp .env.example .env.local
+npm run supabase:start
+npm run supabase:env
 npm run dev
 ```
 
-Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env.local` when
-connecting the app to Supabase. Use the publishable key in browser code; never
-use a secret or service-role key. Local environment files are ignored by Git.
+The local-only demo account is `local-dev@example.test` /
+`local-dev-password`. `supabase:env` writes the local API URL and anon key to
+the ignored `.env.local`; it refuses to overwrite an existing file. Never use
+the demo credentials outside local development or expose a service-role key in
+browser code.
+
+Use `npm run supabase:reset` to rebuild the local database from versioned
+migrations and restore the demo family. This deletes data in the local database
+only. Stop the services with `npm run supabase:stop`. Regenerate TypeScript
+database types after schema changes with `npm run supabase:types`.
 
 ## Checks
 

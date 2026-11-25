@@ -11,6 +11,7 @@ build/
 # Tool output
 .vercel/
 supabase/.temp/
+supabase/.branches/
 
 # Operating system and editor files
 .DS_Store
