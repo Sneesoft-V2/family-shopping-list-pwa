@@ -3,12 +3,12 @@ import { describe, expect, it } from 'vitest';
 import App from './App';
 
 describe('App', () => {
-  it('renders the German family shopping-list welcome screen', () => {
+  it('renders a configuration warning when Supabase is not configured', () => {
     render(<App />);
 
     expect(
-      screen.getByRole('heading', { name: 'Alles für den nächsten Einkauf.' }),
+      screen.getByRole('heading', { name: 'Supabase-Konfiguration fehlt.' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Familien-Einkauf')).toBeInTheDocument();
+    expect(screen.getByText(/VITE_SUPABASE_URL/)).toBeInTheDocument();
   });
 });

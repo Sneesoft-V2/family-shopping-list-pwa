@@ -56,6 +56,29 @@ npm test
 npm run format:check
 ```
 
+## Supabase setup
+
+Database changes are versioned in `supabase/migrations/` and must be applied
+with the Supabase CLI, not manually through the SQL Editor. The project config
+is in `supabase/config.toml`.
+
+To apply migrations to the separate staging project, configure the GitHub
+`staging` environment with the `SUPABASE_PROJECT_REF` variable and
+`SUPABASE_ACCESS_TOKEN` and `SUPABASE_DB_PASSWORD` secrets. Also set the
+non-secret `DEVELOPMENT_SUPABASE_PROJECT_REF` repository variable. When a
+production project is created, also set `PRODUCTION_SUPABASE_PROJECT_REF`.
+The `Apply staging database migrations` workflow only runs from `main` and
+refuses to continue if the staging ref matches development or the configured
+production ref. Protect the `staging`
+environment with required reviewers and restrict deployments to `main`.
+Dispatch the workflow only after the staging project and its environment
+values have been created.
+
+The GitHub Pages production build reads `VITE_SUPABASE_URL` and
+`VITE_SUPABASE_ANON_KEY` from the `github-pages` environment and fails if
+either is missing. Use only a publishable/anon key in the browser build; never
+add a service-role key to frontend configuration.
+
 ## Vercel API
 
 Vercel serves Node.js functions from `api/` at the repository root. Configure
