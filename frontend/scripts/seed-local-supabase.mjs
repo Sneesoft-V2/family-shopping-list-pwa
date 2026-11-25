@@ -68,6 +68,22 @@ if (!user) {
   user = data.user;
 }
 
+if (!user) {
+  throw new Error('Could not find or create the local demo user.');
+}
+
+const { error: roleError } = await adminClient.from('user_roles').upsert({
+  user_id: user.id,
+  role: 'admin',
+  must_change_password: false,
+});
+
+if (roleError) {
+  throw new Error(
+    `Could not assign the local demo admin role: ${roleError.message}`,
+  );
+}
+
 const userClient = createClient(apiUrl, anonKey, {
   auth: { persistSession: false },
 });
@@ -85,6 +101,7 @@ if (signInError) {
 const { data: membership, error: membershipError } = await userClient
   .from('family_memberships')
   .select('family_id')
+  .limit(1)
   .maybeSingle();
 
 if (membershipError) {

@@ -37,20 +37,20 @@ export type Database = {
       families: {
         Row: {
           created_at: string;
-          created_by: string;
+          created_by: string | null;
           id: string;
           name: string;
         };
         ComputedFields: never;
         Insert: {
           created_at?: string;
-          created_by: string;
+          created_by?: string | null;
           id?: string;
           name: string;
         };
         Update: {
           created_at?: string;
-          created_by?: string;
+          created_by?: string | null;
           id?: string;
           name?: string;
         };
@@ -61,7 +61,6 @@ export type Database = {
           created_at: string;
           family_id: string;
           id: string;
-          role: string;
           user_id: string;
         };
         ComputedFields: never;
@@ -69,14 +68,12 @@ export type Database = {
           created_at?: string;
           family_id: string;
           id?: string;
-          role?: string;
           user_id: string;
         };
         Update: {
           created_at?: string;
           family_id?: string;
           id?: string;
-          role?: string;
           user_id?: string;
         };
         Relationships: [
@@ -111,12 +108,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      user_roles: {
+        Row: {
+          created_at: string;
+          must_change_password: boolean;
+          role: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          must_change_password?: boolean;
+          role: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          must_change_password?: boolean;
+          role?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
+      can_access_app: { Args: Record<PropertyKey, never>; Returns: boolean };
       create_family: { Args: { family_name: string }; Returns: string };
+      is_app_admin: { Args: Record<PropertyKey, never>; Returns: boolean };
     };
     Enums: {
       [_ in never]: never;

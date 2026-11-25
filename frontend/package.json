@@ -13,6 +13,7 @@
     "supabase:seed": "node scripts/seed-local-supabase.mjs",
     "supabase:env": "node scripts/configure-local-supabase.mjs",
     "supabase:types": "node scripts/generate-database-types.mjs",
+    "supabase:test": "supabase test db",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

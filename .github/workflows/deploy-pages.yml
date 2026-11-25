@@ -71,15 +71,18 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
         run: |
           test -n "$VITE_SUPABASE_URL" || { echo "Set VITE_SUPABASE_URL in the github-pages environment."; exit 1; }
           test -n "$VITE_SUPABASE_ANON_KEY" || { echo "Set VITE_SUPABASE_ANON_KEY in the github-pages environment."; exit 1; }
+          test -n "$VITE_API_URL" || { echo "Set VITE_API_URL in the github-pages environment."; exit 1; }
       - run: npm run build
         working-directory: frontend
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
