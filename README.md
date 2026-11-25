@@ -32,8 +32,8 @@ The project backlog is maintained in Linear.
 
 ## Local development
 
-The local Supabase stack uses Docker and is isolated from the hosted development
-and staging projects. Install Node.js LTS and Docker Desktop, then run:
+The local Supabase stack uses Docker and is isolated from the hosted staging
+and production projects. Install Node.js LTS and Docker Desktop, then run:
 
 ```sh
 cd frontend
@@ -53,8 +53,8 @@ Use `npm run supabase:reset` to recreate the local database from all versioned
 migrations and restore the demo account. This is destructive only to the local
 database. Run `npm run supabase:stop` to stop the local services. Regenerate
 frontend database types after schema changes with `npm run supabase:types`.
-Never point local development at the hosted development, staging, or production
-database. Never expose a secret or service-role key in the browser.
+Never point local development at a hosted database. Never expose a secret or
+service-role key in the browser.
 
 Run the frontend checks from `frontend/`:
 
@@ -65,28 +65,36 @@ npm test
 npm run format:check
 ```
 
-## Supabase setup
+## Staging previews
+
+Connect the repository to Vercel with `frontend/` as the Root Directory. Vercel
+creates Preview deployments for pull requests; `frontend/vercel.json` skips
+Vercel Production deployments because GitHub Pages is the production host. Set
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` for the Vercel Preview
+environment to the staging project's URL and publishable/anon key.
 
 Database changes are versioned in `supabase/migrations/` and must be applied
 with the Supabase CLI, not manually through the SQL Editor. The project config
-is in `supabase/config.toml`.
+is in `supabase/config.toml`. Set the non-secret
+`STAGING_SUPABASE_PROJECT_REF` and `PRODUCTION_SUPABASE_PROJECT_REF` repository
+variables. If a separate hosted development project is used, also set the
+optional `DEVELOPMENT_SUPABASE_PROJECT_REF` variable.
 
-To apply migrations to the separate staging project, configure the GitHub
-`staging` environment with the `SUPABASE_PROJECT_REF` variable and
-`SUPABASE_ACCESS_TOKEN` and `SUPABASE_DB_PASSWORD` secrets. Also set the
-non-secret `DEVELOPMENT_SUPABASE_PROJECT_REF` repository variable. When a
-production project is created, also set `PRODUCTION_SUPABASE_PROJECT_REF`.
-The `Apply staging database migrations` workflow only runs from `main` and
-refuses to continue if the staging ref matches development or the configured
-production ref. Protect the `staging`
-environment with required reviewers and restrict deployments to `main`.
-Dispatch the workflow only after the staging project and its environment
-values have been created.
+The `Apply staging database migrations` workflow is manually dispatched from
+the branch being previewed. It refuses to run if the staging project ref
+matches production or a configured development project. The `staging`
+environment contains `SUPABASE_ACCESS_TOKEN` and `SUPABASE_DB_PASSWORD` secrets.
+It is a shared database, so apply migrations one branch at a time.
 
-The GitHub Pages production build reads `VITE_SUPABASE_URL` and
-`VITE_SUPABASE_ANON_KEY` from the `github-pages` environment and fails if
-either is missing. Use only a publishable/anon key in the browser build; never
-add a service-role key to frontend configuration.
+## Production deployment
+
+Pushes to `main` first apply versioned migrations to the production Supabase
+project, then build and deploy the frontend to GitHub Pages. The `production`
+environment needs `SUPABASE_ACCESS_TOKEN` and `SUPABASE_DB_PASSWORD` secrets;
+the GitHub Pages production build reads `VITE_SUPABASE_URL` and
+`VITE_SUPABASE_ANON_KEY` from the `github-pages` environment. Use only a
+publishable/anon key in frontend configuration, never a service-role key.
+Restrict both `production` and `github-pages` environments to `main`.
 
 ## Vercel API
 
