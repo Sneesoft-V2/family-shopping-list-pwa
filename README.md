@@ -56,6 +56,15 @@ npm test
 npm run format:check
 ```
 
+## Supabase setup
+
+Create the database objects by applying the migration in
+`supabase/migrations/20261125000000_init_sprint1.sql`. Configure
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` for local development or as
+GitHub Actions repository variables for Pages deployment. The migration creates
+profiles, families and memberships, including an authentication trigger and an
+authenticated `create_family` function. It contains no credentials or secret keys.
+
 ## Vercel API
 
 Vercel serves Node.js functions from `api/` at the repository root. Configure
